@@ -1,7 +1,6 @@
 # ProtoType
 
-###
-*Author:    Home Monitor Team
+Author:    Home Monitor Team
 Date:      12 November 2020
 Course:    CS 4000, University of Utah, School of Computing
 Copyright: CS 4000 and Home Monitor Team - This work may not be copied for use in Academic Coursework.
