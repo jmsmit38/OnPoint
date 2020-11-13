@@ -13,20 +13,6 @@ Comments to Evaluators:
   Any information you need the course staff to know when grading your work.  This can  
   include known bugs, how to "run" the program, etc.
 
-Assignment Specific Write-up:
-
-  Any additional feedback or write up required by the assignment.
-
-Peers Helped:
-
-  o) Person's name who you helped with ideas/debugging/design/etc.
-  o) ...
-
-Peers Consulted:
-
-   o) Person's name who helped you with ideas/debugging/design/etc.
-   o) ...
-
 Acknowledgements:
 
    List of any outside software/libraries/tools/sounds/images/etc. that you
