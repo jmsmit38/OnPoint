@@ -1,0 +1,50 @@
+.root {
+    display: flex;
+    align-items: center;
+}
+
+.menuButton {
+    display: flex;
+    align-items: center;
+    background-color: transparent;
+    color: var(--mediumgray-color);
+    border: none;
+    outline: none;
+}
+
+.menuIcon {
+    transform: scale(1.3);
+}
+
+.menu {
+    position: absolute;
+    width: 100px;
+    top: 80px;
+    right: 0%;
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    border-radius: 4px;
+    box-shadow: var(--box-shadow);
+    border: none;
+}
+
+.menuItem, .lastMenuItem {
+    border: none;
+    font-size: 1.1em;
+    border-bottom: 1px solid var(--lightgray-color);
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    color: var(--primary-color);
+    background-color: transparent;
+    outline: none;
+}
+
+.menuItem:hover, .lastMenuItem:hover {
+    box-shadow: var(--box-shadow);
+}
+
+.lastMenuItem {
+    border-bottom: none;
+}

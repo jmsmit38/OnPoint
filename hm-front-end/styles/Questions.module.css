@@ -1,0 +1,30 @@
+.container {
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-items: center;
+}
+
+.loginForm {
+  margin-top: 200px;
+}
+
+.createButton {
+    background-color: var(--secondary-color);
+    align-self: center;
+    border: none;
+    outline: none;
+    height: 48px;
+    width: 160px;
+    color: white;
+    border-radius: 32px;
+    font-size: 1.2em;
+    margin: 32px;
+    box-shadow: var(--box-shadow);
+}
+
+.footer {
+}

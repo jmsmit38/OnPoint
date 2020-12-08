@@ -1,0 +1,15 @@
+.root {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: white;
+
+    box-sizing: border-box;
+    padding: 0px 16px;
+    height: 80px;
+    width: 100%;
+}
+
+.logo {
+    height: 48px;
+}
