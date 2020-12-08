@@ -10,7 +10,7 @@ const dynamoDb = new AWS.DynamoDB.DocumentClient();
 module.exports.newService = (event, context, callback) => {
   const requestBody = JSON.parse(event.body);
   const userID = requestBody.userID;
-  const location = requestBody.location;
+  const loc = requestBody.loc;
   const numareas = requestBody.numareas;
   const sqft = requestBody.sqft;
   const rooms = requestBody.rooms;
@@ -19,13 +19,13 @@ module.exports.newService = (event, context, callback) => {
   const finance = requestBody.finance;
   const description = requestBody.description;
 
-  if (typeof userID !== 'string' || typeof location !== 'string' || typeof numareas !== 'string' || typeof sqft !== 'string' || typeof rooms !== 'string' || typeof walls !== 'string' || typeof timeline !== 'string' || typeof finance !== 'string' || typeof description !== 'string') {
+  if (typeof userID !== 'string' || typeof loc !== 'string' || typeof numareas !== 'string' || typeof sqft !== 'string' || typeof rooms !== 'string' || typeof walls !== 'string' || typeof timeline !== 'string' || typeof finance !== 'string' || typeof description !== 'string') {
     console.error('Validation Failed');
     callback(new Error('Couldn\'t submit service request because of validation errors.'));
     return;
   }
 
-  submitServiceP(serviceInfo(userID, location, numareas, sqft, rooms, walls, timeline, finance, description))
+  submitServiceP(serviceInfo(userID, loc, numareas, sqft, rooms, walls, timeline, finance, description))
     .then(res => {
       callback(null, {
         statusCode: 200,
@@ -49,7 +49,7 @@ module.exports.newService = (event, context, callback) => {
 module.exports.getServices = (event, context, callback) => {
   var params = {
       TableName: process.env.SERVICE_TABLE,
-      ProjectionExpression: "serviceID, userID, location, numareas, sqft, rooms, walls, timeline, finance, description"
+      ProjectionExpression: "serviceID, userID, loc, numareas, sqft, rooms, walls, timeline, finance, description, submittedAt, updatedAt"
   };
 
   console.log("Scanning Service table.");
@@ -89,7 +89,56 @@ module.exports.getServiceDetails = (event, context, callback) => {
     })
     .catch(error => {
       console.error(error);
-      callback(new Error('Couldn\'t fetch service.'));
+      callback(new Error('Couldn\'t get service details.'));
+      return;
+    });
+};
+
+module.exports.deleteService = (event, context, callback) => {
+  const params = {
+    TableName: process.env.SERVICE_TABLE,
+    Key: {
+      serviceID: event.pathParameters.serviceID,
+    },
+  };
+
+  dynamoDb.delete(params).promise()
+    .then(result => {
+      const response = {
+        statusCode: 200,
+        body: JSON.stringify(result.Item),
+      };
+      callback(null, response);
+    })
+    .catch(error => {
+      console.error(error);
+      callback(new Error('Couldn\'t delete service.'));
+      return;
+    });
+};
+
+module.exports.deleteService = (event, context, callback) => {
+  const params = {
+    TableName: process.env.SERVICE_TABLE,
+    Key: {
+      serviceID: event.pathParameters.serviceID,
+    },
+  };
+
+  dynamoDb.delete(params).promise()
+    .then(result => {
+      const response = {
+        statusCode: 200,
+        body: JSON.stringify({
+          message: `Sucessfully deleted service`,
+          serviceID: res.serviceID
+        }),
+      };
+      callback(null, response);
+    })
+    .catch(error => {
+      console.error(error);
+      callback(new Error('Couldn\'t delete service.'));
       return;
     });
 };
@@ -105,12 +154,12 @@ const submitServiceP = service => {
     .then(res => service);
 };
 
-const serviceInfo = (userID, location, numareas, sqft, rooms, walls, timeline, finance, description) => {
+const serviceInfo = (userID, loc, numareas, sqft, rooms, walls, timeline, finance, description) => {
   const timestamp = new Date().getTime();
   return {
     serviceID: uuid.v1(),
     userID: userID,
-    location: location,
+    loc: loc,
     numareas: numareas,
     sqft: sqft,
     rooms: rooms,

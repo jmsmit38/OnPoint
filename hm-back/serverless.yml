@@ -32,11 +32,18 @@ provider:
   iamRoleStatements:
     - Effect: Allow
       Action:
+        - dynamodb:DescribeTable
         - dynamodb:Query
         - dynamodb:Scan
         - dynamodb:GetItem
         - dynamodb:PutItem
-      Resource: "*"
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+        - lambda:InvokeFunction
+        - lambda:InvokeAsync
+      Resource:
+        - arn:aws:dynamodb:us-west-2:*:*
+        - arn:aws:lambda:us-west-2:*:*
 #    - Effect: "Allow"
 #      Action:
 #        - "s3:ListBucket"
@@ -55,6 +62,7 @@ provider:
   environment:
     USER_TABLE: "user-${self:service}-${opt:stage, self:provider.stage}"
     SERVICE_TABLE: "service-${self:service}-${opt:stage, self:provider.stage}"
+    REVIEW_TABLE: "review-${self:service}-${opt:stage, self:provider.stage}"
     #USER_EMAIL_TABLE: "candidate-email-${opt:stage, self:provider.stage}"
 # you can add packaging information here
 #package:
@@ -78,6 +86,14 @@ functions:
           path: users/create
           method: post
 
+  updateUser:
+    handler: api/user.updateUser
+    description: Update user info in database
+    events:
+      - http:
+          path: users/update/{userID}
+          method: post
+
   getUsers:
     handler: api/user.getUsers
     description: Get all users from database
@@ -93,6 +109,16 @@ functions:
       - http:
           path: users/getdetails/{userID}
           method: get
+
+  deleteUser:
+    handler: api/user.deleteUser
+    description: Delete user from database
+    events:
+      - http:
+          path: users/delete/{userID}
+          method: delete
+
+
 #############################
 ##### SERVICE FUNCTIONS #####
 #############################
@@ -119,6 +145,60 @@ functions:
       - http:
           path: service/getdetails/{serviceID}
           method: get
+
+  deleteService:
+    handler: api/service.deleteService
+    description: Delete service from database
+    events:
+      - http:
+          path: service/delete/{serviceID}
+          method: delete
+
+############################
+##### REVIEW FUNCTIONS #####
+############################
+  createReview:
+    handler: api/review.newReview
+    memorySize: 128
+    description: Create a new review
+    events:
+      - http:
+          path: review/create
+          method: post
+
+  updateReview:
+    handler: api/review.updateReview
+    description: Update review info in database
+    events:
+      - http:
+          path: review/update/{reviewID}
+          method: post
+
+  getReviews:
+    handler: api/review.getReviews
+    description: Get all reviews from database
+    events:
+      - http:
+          path: review/getall
+          method: get
+
+  getReviewDetails:
+    handler: api/review.getReviewDetails
+    description: Get review details from database
+    events:
+      - http:
+          path: review/getdetails/{reviewID}
+          method: get
+
+  deleteReview:
+    handler: api/review.deleteReview
+    description: Delete review from database
+    events:
+      - http:
+          path: review/delete/{reviewID}
+          method: delete
+
+
 
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events
@@ -199,6 +279,27 @@ resources:
         StreamSpecification:
           StreamViewType: "NEW_AND_OLD_IMAGES"
         TableName: ${self:provider.environment.SERVICE_TABLE}
+
+
+    ##### CREATE REVIEW TABLE #####
+    ReviewsDynamoDbTable:
+      Type: 'AWS::DynamoDB::Table'
+      DeletionPolicy: Retain
+      Properties:
+        AttributeDefinitions:
+          -
+            AttributeName: "reviewID"
+            AttributeType: "S" 
+        KeySchema:
+          -
+            AttributeName: "reviewID"
+            KeyType: "HASH"
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        StreamSpecification:
+          StreamViewType: "NEW_AND_OLD_IMAGES"
+        TableName: ${self:provider.environment.REVIEW_TABLE}
 #resources:
 #  Resources:
 #    NewResource:
