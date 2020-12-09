@@ -20,82 +20,7 @@ class BlogPosts extends React.Component {
 
     this.state = {
       // First list of posts.
-/*      PostsListOne: [
-        {
-          backgroundImage: require("../images/content-management/1.jpeg"),
-          category: "Business",
-          categoryTheme: "dark",
-          author: "Anna Kunis",
-          authorAvatar: require("../images/avatars/1.jpg"),
-          title: "Conduct at an replied removal an amongst",
-          body:
-            "However venture pursuit he am mr cordial. Forming musical am hearing studied be luckily. But in for determine what would see...",
-          date: "28 February 2019"
-        },
-        {
-          backgroundImage: require("../images/content-management/2.jpeg"),
-          category: "Travel",
-          categoryTheme: "info",
-          author: "James Jamerson",
-          authorAvatar: require("../images/avatars/2.jpg"),
-          title: "Off tears are day blind smile alone had ready",
-          body:
-            "Is at purse tried jokes china ready decay an. Small its shy way had woody downs power. To denoting admitted speaking learning my...",
-          date: "29 February 2019"
-        },
-        {
-          backgroundImage: require("../images/content-management/3.jpeg"),
-          category: "Technology",
-          categoryTheme: "royal-blue",
-          author: "Jimmy Jackson",
-          authorAvatar: require("../images/avatars/2.jpg"),
-          title: "Difficult in delivered extensive at direction",
-          body:
-            "Is at purse tried jokes china ready decay an. Small its shy way had woody downs power. To denoting admitted speaking learning my...",
-          date: "29 February 2019"
-        },
-        {
-          backgroundImage: require("../images/content-management/4.jpeg"),
-          category: "Business",
-          categoryTheme: "warning",
-          author: "John James",
-          authorAvatar: require("../images/avatars/3.jpg"),
-          title: "It so numerous if he may outlived disposal",
-          body:
-            "How but sons mrs lady when. Her especially are unpleasant out alteration continuing unreserved ready road market resolution...",
-          date: "29 February 2019"
-        }
-      ],
-
-      // Second list of posts.
-      PostsListTwo: [
-        {
-          backgroundImage: require("../images/content-management/5.jpeg"),
-          category: "Travel",
-          categoryTheme: "info",
-          author: "Anna Ken",
-          authorAvatar: require("../images/avatars/0.jpg"),
-          title:
-            "Attention he extremity unwilling on otherwise cars backwards yet",
-          body:
-            "Conviction up partiality as delightful is discovered. Yet jennings resolved disposed exertion you off. Left did fond drew fat head poor jet pan flying over...",
-          date: "29 February 2019"
-        },
-        {
-          backgroundImage: require("../images/content-management/6.jpeg"),
-          category: "Business",
-          categoryTheme: "dark",
-          author: "John James",
-          authorAvatar: require("../images/avatars/1.jpg"),
-          title:
-            "Totally words widow one downs few age every seven if miss part by fact",
-          body:
-            "Discovered had get considered projection who favourable. Necessary up knowledge it tolerably. Unwilling departure education to admitted speaking...",
-          date: "29 February 2019"
-        }
-      ],
-*/
-      // Third list of posts.
+      /*
       PostsListOne: [
         {
           author: "John James",
@@ -151,13 +76,39 @@ class BlogPosts extends React.Component {
           date: "29 February 2019"
         }
       ]
+      */
+
+     error: null,
+     isLoaded: false,
+     PostsListOne: []
     };
+  }
+
+  componentDidMount() {
+    fetch("https://q2k5cu1u5b.execute-api.us-west-2.amazonaws.com/dev/review/getall")
+      .then(res => res.json())
+      .then(
+        (result) => {
+          this.setState({
+            isLoaded: true,
+            PostsListOne: result.Reviews
+          });
+        },
+        // Note: it's important to handle errors here
+        // instead of a catch() block so that we don't swallow
+        // exceptions from actual bugs in components.
+        (error) => {
+          this.setState({
+            isLoaded: true,
+            error
+          });
+        }
+      )
   }
 
   render() {
     const {
-      PostsListOne,
-      PostsListTwo
+      PostsListOne
     } = this.state;
 
     return (
@@ -178,54 +129,11 @@ class BlogPosts extends React.Component {
                 </CardBody>
                 <CardFooter className="border-top d-flex">
                   <div className="card-post__author d-flex">
-                    <a
-                      href="#"
-                      className="card-post__author-avatar card-post__author-avatar--small"
-                      style={{ backgroundImage: `url('${post.authorAvatar}')` }}
-                    >
-                      Written by James Khan
-                    </a>
                     <div className="d-flex flex-column justify-content-center ml-3">
                       <span className="card-post__author-name">
-                        {post.author}
+                        {post.firstname} {post.lastname}
                       </span>
-                      <small className="text-muted">{post.date}</small>
-                    </div>
-                  </div>
-                  <div className="my-auto ml-auto">
-                    <Button size="sm" theme="white">
-                      <i className="far fa-bookmark mr-1" /> Bookmark
-                    </Button>
-                  </div>
-                </CardFooter>
-              </Card>
-            </Col>
-          ))}
-        </Row>
-
-        {/* Second Row of posts */}
-        <Row>
-          {PostsListTwo.map((post, idx) => (
-            <Col lg="4" key={idx}>
-              <Card small className="card-post mb-4">
-                <CardBody>
-                  <h5 className="card-title">{post.title}</h5>
-                  <p className="card-text text-muted">{post.body}</p>
-                </CardBody>
-                <CardFooter className="border-top d-flex">
-                  <div className="card-post__author d-flex">
-                    <a
-                      href="#"
-                      className="card-post__author-avatar card-post__author-avatar--small"
-                      style={{ backgroundImage: `url('${post.authorAvatar}')` }}
-                    >
-                      Written by James Khan
-                    </a>
-                    <div className="d-flex flex-column justify-content-center ml-3">
-                      <span className="card-post__author-name">
-                        {post.author}
-                      </span>
-                      <small className="text-muted">{post.date}</small>
+                      <small className="text-muted">{post.submittedAt}</small>
                     </div>
                   </div>
                   <div className="my-auto ml-auto">
@@ -244,3 +152,41 @@ class BlogPosts extends React.Component {
 }
 
 export default BlogPosts;
+
+
+/*
+<Row>
+{PostsListTwo.map((post, idx) => (
+  <Col lg="4" key={idx}>
+    <Card small className="card-post mb-4">
+      <CardBody>
+        <h5 className="card-title">{post.title}</h5>
+        <p className="card-text text-muted">{post.body}</p>
+      </CardBody>
+      <CardFooter className="border-top d-flex">
+        <div className="card-post__author d-flex">
+          <a
+            href="#"
+            className="card-post__author-avatar card-post__author-avatar--small"
+            style={{ backgroundImage: `url('${post.authorAvatar}')` }}
+          >
+            Written by James Khan
+          </a>
+          <div className="d-flex flex-column justify-content-center ml-3">
+            <span className="card-post__author-name">
+              {post.author}
+            </span>
+            <small className="text-muted">{post.date}</small>
+          </div>
+        </div>
+        <div className="my-auto ml-auto">
+          <Button size="sm" theme="white">
+            <i className="far fa-bookmark mr-1" /> Bookmark
+          </Button>
+        </div>
+      </CardFooter>
+    </Card>
+  </Col>
+))}
+</Row>
+*/

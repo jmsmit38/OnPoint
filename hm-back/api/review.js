@@ -11,16 +11,17 @@ module.exports.newReview = (event, context, callback) => {
   const requestBody = JSON.parse(event.body);
   const serviceID= requestBody.serviceID;
   const userID = requestBody.userID;
+  const title = requestBody.title;
   const body = requestBody.body;
   const stars = requestBody.stars;
 
-  if (typeof body !== 'string' || typeof stars !== 'number') {
+  if (typeof title !== 'string' || typeof body !== 'string' || typeof stars !== 'number') {
     console.error('Validation Failed');
     callback(new Error('Couldn\'t submit review because of validation errors.'));
     return;
   }
 
-  submitReviewP(reviewInfo(serviceID, userID, body, stars))
+  submitReviewP(reviewInfo(serviceID, userID, title, body, stars))
     .then(res => {
       callback(null, {
         statusCode: 200,
@@ -46,17 +47,18 @@ module.exports.updateReview = (event, context, callback) => {
   const reviewID = requestBody.reviewID;
   const serviceID= requestBody.serviceID;
   const userID = requestBody.userID;
+  const title = requestBody.title;
   const body = requestBody.body;
   const stars = requestBody.stars;
   const submittedAt = requestBody.submittedAt;
 
-  if (typeof userID !== 'string' || typeof body !== 'string' || typeof stars !== 'number') {
+  if (typeof userID !== 'string' || typeof title !== 'string' || typeof body !== 'string' || typeof stars !== 'number') {
     console.error('Validation Failed');
     callback(new Error('Couldn\'t update review because of validation errors.'));
     return;
   }
 
-  updateReviewP(reviewInfoU(reviewID, serviceID, userID, body, stars, submittedAt))
+  updateReviewP(reviewInfoU(reviewID, serviceID, userID, title, body, stars, submittedAt))
     .then(res => {
       callback(null, {
         statusCode: 200,
@@ -80,7 +82,7 @@ module.exports.updateReview = (event, context, callback) => {
 module.exports.getReviews = (event, context, callback) => {
   var params = {
       TableName: process.env.REVIEW_TABLE,
-      ProjectionExpression: "reviewID, serviceID, userID, body, stars, submittedAt, updatedAt"
+      ProjectionExpression: "reviewID, serviceID, userID, title, body, stars, submittedAt, updatedAt"
   };
 
   console.log("Scanning Review table.");
@@ -93,6 +95,11 @@ module.exports.getReviews = (event, context, callback) => {
           console.log("Scan succeeded.");
           return callback(null, {
               statusCode: 200,
+              headers: {
+                "Access-Control-Allow-Headers" : "Content-Type",
+                "Access-Control-Allow-Origin": "http://localhost:3000",
+                "Access-Control-Allow-Methods": "OPTIONS,POST,GET"
+              },
               body: JSON.stringify({
                   Reviews: data.Items
               })
@@ -218,24 +225,26 @@ const updateReviewP = review => {
     ExpressionAttributeValues: {
       ":serviceID": review.serviceID,
       ":userID": review.userID,
+      ":title": review.title,
       ":body": review.body,
       ":stars": review.stars,
       ":submittedAt": review.submittedAt,
       ":updatedAt": review.updatedAt  
     },
-    UpdateExpression: 'SET serviceID = :serviceID, userID = :userID, body = :body, stars = :stars, submittedAt = :submittedAt, updatedAt = :updatedAt',
+    UpdateExpression: 'SET serviceID = :serviceID, userID = :userID, title = :title, body = :body, stars = :stars, submittedAt = :submittedAt, updatedAt = :updatedAt',
     ReturnValues: 'UPDATED_NEW',
   };
   return dynamoDb.update(reviewUp).promise()
     .then(res => review);
 };
 
-const reviewInfoU = (reviewID, userID, serviceID, body, stars, submittedAt) => {
+const reviewInfoU = (reviewID, userID, serviceID, title, body, stars, submittedAt) => {
   const timestamp = new Date().getTime();
   return {
     reviewID: reviewID,
     userID: userID,
     serviceID: serviceID,
+    title: title,
     body: body,
     stars: stars,
     submittedAt: submittedAt,
@@ -243,12 +252,13 @@ const reviewInfoU = (reviewID, userID, serviceID, body, stars, submittedAt) => {
   };
 };
 
-const reviewInfo = (userID, serviceID, body, stars) => {
+const reviewInfo = (userID, serviceID, title, body, stars) => {
   const timestamp = new Date().getTime();
   return {
     reviewID: uuid.v1(),
     userID: userID,
     serviceID: serviceID,
+    title: title,
     body: body,
     stars: stars,
     submittedAt: timestamp,

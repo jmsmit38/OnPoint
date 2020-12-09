@@ -96,8 +96,21 @@ const UserAccountDetails = ({ title }) => (
                 <Col md="4" className="form-group">
                   <label htmlFor="feInputState">State</label>
                   <FormSelect id="feInputState">
-                    <option>Choose...</option>
-                    <option>...</option>
+                    <option>AK</option>
+                    <option>AL</option>
+                    <option>AZ</option>
+                    <option>CA</option>
+                    <option>CT</option>
+                    <option>DE</option>
+                    <option>DC</option>
+                    <option>FL</option>
+                    <option>GA</option>
+                    <option>HI</option>
+                    <option>ID</option>
+                    <option>IA</option>
+                    <option>LA</option>
+                    <option>MI</option>
+                    <option>MO</option>
                   </FormSelect>
                 </Col>
                 {/* Zip Code */}
