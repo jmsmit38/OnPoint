@@ -28,6 +28,11 @@ module.exports.newUser = (event, context, callback) => {
     .then(res => {
       callback(null, {
         statusCode: 200,
+        headers: {
+          "Access-Control-Allow-Headers" : "Content-Type",
+          "Access-Control-Allow-Origin": "http://localhost:3000",
+          "Access-Control-Allow-Methods": "OPTIONS,POST,GET"
+        },
         body: JSON.stringify({
           message: `Sucessfully submitted user with email ${email}`,
           userID: res.userID
@@ -68,6 +73,11 @@ module.exports.updateUser = (event, context, callback) => {
     .then(res => {
       callback(null, {
         statusCode: 200,
+        headers: {
+          "Access-Control-Allow-Headers" : "Content-Type",
+          "Access-Control-Allow-Origin": "http://localhost:3000",
+          "Access-Control-Allow-Methods": "OPTIONS,POST,GET"
+        },
         body: JSON.stringify({
           message: `Sucessfully updated user with email ${email}`,
           userID: res.userID

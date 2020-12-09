@@ -25,6 +25,11 @@ module.exports.newReview = (event, context, callback) => {
     .then(res => {
       callback(null, {
         statusCode: 200,
+        headers: {
+          "Access-Control-Allow-Headers" : "Content-Type",
+          "Access-Control-Allow-Origin": "http://localhost:3000",
+          "Access-Control-Allow-Methods": "OPTIONS,POST,GET"
+        },
         body: JSON.stringify({
           message: `Sucessfully submitted review from user ${userID}`,
           reviewID: res.reviewID
@@ -124,6 +129,11 @@ module.exports.getReviewDetails = (event, context, callback) => {
     .then(result => {
       const response = {
         statusCode: 200,
+        headers: {
+          "Access-Control-Allow-Headers" : "Content-Type",
+          "Access-Control-Allow-Origin": "http://localhost:3000",
+          "Access-Control-Allow-Methods": "OPTIONS,POST,GET"
+        },
         body: JSON.stringify(result.Item),
       };
       callback(null, response);

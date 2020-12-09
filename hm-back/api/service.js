@@ -29,6 +29,11 @@ module.exports.newService = (event, context, callback) => {
     .then(res => {
       callback(null, {
         statusCode: 200,
+        headers: {
+          "Access-Control-Allow-Headers" : "Content-Type",
+          "Access-Control-Allow-Origin": "http://localhost:3000",
+          "Access-Control-Allow-Methods": "OPTIONS,POST,GET"
+        },
         body: JSON.stringify({
           message: `Sucessfully submitted service request`,
           serviceID: res.serviceID
@@ -62,6 +67,11 @@ module.exports.getServices = (event, context, callback) => {
           console.log("Scan succeeded.");
           return callback(null, {
               statusCode: 200,
+              headers: {
+                "Access-Control-Allow-Headers" : "Content-Type",
+                "Access-Control-Allow-Origin": "http://localhost:3000",
+                "Access-Control-Allow-Methods": "OPTIONS,POST,GET"
+              },
               body: JSON.stringify({
                   services: data.Items
               })
@@ -83,6 +93,11 @@ module.exports.getServiceDetails = (event, context, callback) => {
     .then(result => {
       const response = {
         statusCode: 200,
+        headers: {
+          "Access-Control-Allow-Headers" : "Content-Type",
+          "Access-Control-Allow-Origin": "http://localhost:3000",
+          "Access-Control-Allow-Methods": "OPTIONS,POST,GET"
+        },
         body: JSON.stringify(result.Item),
       };
       callback(null, response);
@@ -90,29 +105,6 @@ module.exports.getServiceDetails = (event, context, callback) => {
     .catch(error => {
       console.error(error);
       callback(new Error('Couldn\'t get service details.'));
-      return;
-    });
-};
-
-module.exports.deleteService = (event, context, callback) => {
-  const params = {
-    TableName: process.env.SERVICE_TABLE,
-    Key: {
-      serviceID: event.pathParameters.serviceID,
-    },
-  };
-
-  dynamoDb.delete(params).promise()
-    .then(result => {
-      const response = {
-        statusCode: 200,
-        body: JSON.stringify(result.Item),
-      };
-      callback(null, response);
-    })
-    .catch(error => {
-      console.error(error);
-      callback(new Error('Couldn\'t delete service.'));
       return;
     });
 };
