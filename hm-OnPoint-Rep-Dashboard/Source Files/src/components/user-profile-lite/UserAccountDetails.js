@@ -15,6 +15,187 @@ import {
   Button
 } from "shards-react";
 
+class UserAccountDetails extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+
+    error: null,
+    isLoaded: false,
+    User: {}
+    };
+  }
+
+  componentDidMount() {
+    fetch("https://q2k5cu1u5b.execute-api.us-west-2.amazonaws.com/dev/users/getdetails/b9f81f30-3a2c-11eb-a889-59b2ef1a3cd1")
+      .then(res => res.json())
+      .then(
+        (result) => {
+          this.setState({
+            isLoaded: true,
+            User: result
+          });
+        },
+        // Note: it's important to handle errors here
+        // instead of a catch() block so that we don't swallow
+        // exceptions from actual bugs in components.
+        (error) => {
+          this.setState({
+            isLoaded: true,
+            error
+          });
+        }
+      )
+  }
+
+  render() {
+    const {
+      User
+    } = this.state;
+
+    return (
+      <Card small className="mb-4">
+        <CardHeader className="border-bottom">
+          <h6 className="m-0">Account Details</h6>
+        </CardHeader>
+        <ListGroup flush>
+          <ListGroupItem className="p-3">
+            <Row>
+              <Col>
+                <Form>
+                  <Row form>
+                    {/* First Name */}
+                    <Col md="6" className="form-group">
+                      <label htmlFor="feFirstName">First Name</label>
+                      <FormInput
+                        id="feFirstName"
+                        placeholder="First Name"
+                        value={User.firstname}
+                        onChange={() => {}}
+                      />
+                    </Col>
+                    {/* Last Name */}
+                    <Col md="6" className="form-group">
+                      <label htmlFor="feLastName">Last Name</label>
+                      <FormInput
+                        id="feLastName"
+                        placeholder="Last Name"
+                        value={User.lastname}
+                        onChange={() => {}}
+                      />
+                    </Col>
+                  </Row>
+                  <Row form>
+                    {/* Email */}
+                    <Col md="6" className="form-group">
+                      <label htmlFor="feEmail">Email</label>
+                      <FormInput
+                        type="email"
+                        id="feEmail"
+                        placeholder="Email Address"
+                        value={User.email}
+                        onChange={() => {}}
+                        autoComplete="email"
+                      />
+                    </Col>
+                    {/* Password */}
+                    <Col md="6" className="form-group">
+                      <label htmlFor="fePassword">Password</label>
+                      <FormInput
+                        type="password"
+                        id="fePassword"
+                        placeholder="Password"
+                        value="EX@MPL#P@$$w0RD"
+                        onChange={() => {}}
+                        autoComplete="current-password"
+                      />
+                    </Col>
+                  </Row>
+                  <FormGroup>
+                    <label htmlFor="feAddress">Address</label>
+                    <FormInput
+                      id="feAddress"
+                      placeholder="Address"
+                      value={User.address1}
+                      onChange={() => {}}
+                    />
+                  </FormGroup>
+                  <Row form>
+                    {/* City */}
+                    <Col md="6" className="form-group">
+                      <label htmlFor="feCity">City</label>
+                      <FormInput
+                        id="feCity"
+                        placeholder="City"
+                        value={User.city}
+                        onChange={() => {}}
+                      />
+                    </Col>
+                    {/* State */}
+                    <Col md="4" className="form-group">
+                      <label htmlFor="feInputState">State</label>
+                      <FormSelect id="feInputState">
+                        <option>AK</option>
+                        <option>AL</option>
+                        <option>AZ</option>
+                        <option>CA</option>
+                        <option>CT</option>
+                        <option>DE</option>
+                        <option>DC</option>
+                        <option>FL</option>
+                        <option>GA</option>
+                        <option>HI</option>
+                        <option>ID</option>
+                        <option>IA</option>
+                        <option>LA</option>
+                        <option>MI</option>
+                        <option>MO</option>
+                      </FormSelect>
+                    </Col>
+                    {/* Zip Code */}
+                    <Col md="2" className="form-group">
+                      <label htmlFor="feZipCode">Zip</label>
+                      <FormInput
+                        id="feZipCode"
+                        placeholder="Zip"
+                        onChange={() => {}}
+                      />
+                    </Col>
+                  </Row>
+                  <Row form>
+                    {/* Description */}
+                    <Col md="12" className="form-group">
+                      <label htmlFor="feDescription">Description</label>
+                      <FormTextarea id="feDescription" rows="5" />
+                    </Col>
+                  </Row>
+                  <Button theme="accent">Update Account</Button>
+                </Form>
+              </Col>
+            </Row>
+          </ListGroupItem>
+        </ListGroup>
+      </Card>
+    );
+  }
+}
+/*
+UserAccountDetails.propTypes = {
+  /**
+   * The component's title.
+   
+  title: PropTypes.string
+};
+
+UserAccountDetails.defaultProps = {
+  title: "Account Details"
+};
+*/
+export default UserAccountDetails;
+
+
+/*
 const UserAccountDetails = ({ title }) => (
   <Card small className="mb-4">
     <CardHeader className="border-bottom">
@@ -26,7 +207,7 @@ const UserAccountDetails = ({ title }) => (
           <Col>
             <Form>
               <Row form>
-                {/* First Name */}
+                
                 <Col md="6" className="form-group">
                   <label htmlFor="feFirstName">First Name</label>
                   <FormInput
@@ -36,7 +217,7 @@ const UserAccountDetails = ({ title }) => (
                     onChange={() => {}}
                   />
                 </Col>
-                {/* Last Name */}
+                
                 <Col md="6" className="form-group">
                   <label htmlFor="feLastName">Last Name</label>
                   <FormInput
@@ -48,7 +229,7 @@ const UserAccountDetails = ({ title }) => (
                 </Col>
               </Row>
               <Row form>
-                {/* Email */}
+                
                 <Col md="6" className="form-group">
                   <label htmlFor="feEmail">Email</label>
                   <FormInput
@@ -60,7 +241,7 @@ const UserAccountDetails = ({ title }) => (
                     autoComplete="email"
                   />
                 </Col>
-                {/* Password */}
+                
                 <Col md="6" className="form-group">
                   <label htmlFor="fePassword">Password</label>
                   <FormInput
@@ -83,7 +264,7 @@ const UserAccountDetails = ({ title }) => (
                 />
               </FormGroup>
               <Row form>
-                {/* City */}
+                
                 <Col md="6" className="form-group">
                   <label htmlFor="feCity">City</label>
                   <FormInput
@@ -92,7 +273,7 @@ const UserAccountDetails = ({ title }) => (
                     onChange={() => {}}
                   />
                 </Col>
-                {/* State */}
+               
                 <Col md="4" className="form-group">
                   <label htmlFor="feInputState">State</label>
                   <FormSelect id="feInputState">
@@ -113,7 +294,7 @@ const UserAccountDetails = ({ title }) => (
                     <option>MO</option>
                   </FormSelect>
                 </Col>
-                {/* Zip Code */}
+               
                 <Col md="2" className="form-group">
                   <label htmlFor="feZipCode">Zip</label>
                   <FormInput
@@ -124,7 +305,7 @@ const UserAccountDetails = ({ title }) => (
                 </Col>
               </Row>
               <Row form>
-                {/* Description */}
+                
                 <Col md="12" className="form-group">
                   <label htmlFor="feDescription">Description</label>
                   <FormTextarea id="feDescription" rows="5" />
@@ -140,9 +321,7 @@ const UserAccountDetails = ({ title }) => (
 );
 
 UserAccountDetails.propTypes = {
-  /**
-   * The component's title.
-   */
+
   title: PropTypes.string
 };
 
@@ -151,3 +330,4 @@ UserAccountDetails.defaultProps = {
 };
 
 export default UserAccountDetails;
+*/

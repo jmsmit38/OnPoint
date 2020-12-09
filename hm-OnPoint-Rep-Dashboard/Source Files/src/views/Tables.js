@@ -5,7 +5,7 @@ import NavbarSearch from "../components/layout/MainNavbar/NavbarSearch";
 import PageTitle from "../components/common/PageTitle";
 
 
-class BlogPosts extends React.Component {
+class CustomerLookup extends React.Component {
   constructor(props) {
     super(props);
 
@@ -110,7 +110,7 @@ class BlogPosts extends React.Component {
   }
 }
 
-export default BlogPosts;
+export default CustomerLookup;
 
 /*
 const Tables = () => (
