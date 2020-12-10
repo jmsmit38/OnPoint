@@ -1,12 +1,10 @@
 import React, { useRef, useEffect } from 'react';
 import MenuIcon from '@material-ui/icons/Menu';
 import styles from './menu.module.css';
-import { useRouter } from 'next/router';
 
-export default function Menu() {
+export default function Menu({ data }) {
     const [menuVisible, setMenuVisible] = React.useState(false);
     const ref = useRef(null);
-    const router = useRouter();
 
     const handleHideDropdown = (event) => {
         if (event.key === 'Escape') {
@@ -29,29 +27,25 @@ export default function Menu() {
         };
     });
 
-    const items = [
-        ['Login', '/login'],
-        ['Sign up', '/signup'],
-        ['Questions', '/questions']
-    ]
-
-    const menuItems = []
-    for (const [index, value] of items.entries()) {
-        const [name, path] = value;
-        menuItems.push(<button key={name} onClick={() => router.push(path)} className={index === items.length - 1 ? styles.lastMenuItem : styles.menuItem}>{name}</button>)
-    }
-
-
     return (
         <div ref={ref} className={styles.root}>
             <button className={styles.menuButton} onClick={() => setMenuVisible(!menuVisible)}><MenuIcon className={styles.menuIcon} /></button>
-            { menuVisible &&
+            { menuVisible && (
                 <div className={styles.menu}>
-                    {
-                        menuItems
-                    }
+                    <a href={"/api/login"} className={styles.lastMenuItem}>Login</a>
+                    <a href={"/api/logout"} className={styles.lastMenuItem}>Logout</a>
+                    <a href={"/api/me"} className={styles.lastMenuItem}>Me</a>
                 </div>
-            }
+            )}
         </div>
-    )
+    );
+}
+
+export async function getServerSideProps() {
+    const res = await fetch('/api/me');
+    const data = await res.json();
+    console.log(data);
+    return {
+        props: { data }, // will be passed to the page component as props
+    }
 }

@@ -3,8 +3,9 @@ import Navbar from '../components/common/navbar/navbar';
 import SearchIcon from '@material-ui/icons/Search';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
+import auth0 from '../utils/auth0';
 
-export default function Home() {
+export default function Home({ data }) {
   const items = ['Electricity', 'Solar', 'Plumbing', 'Electricity', 'Solar', 'Plumbing', 'Electricity', 'Solar'];
   const [keyword, setKeyword] = useState('');
   const filtered = items.filter((item) => item.toLowerCase().includes(keyword));
@@ -27,6 +28,8 @@ export default function Home() {
     };
   });
 
+  console.log(data);
+
   return (
     <div className={styles.container}>
       <main className={styles.main}>
@@ -42,7 +45,7 @@ export default function Home() {
         <div className={styles.industriesGrid}>
           {
             filtered.map((item) => {
-              return <div className={styles.industriesGridItem}>
+              return <div key={item} className={styles.industriesGridItem}>
                 <button onClick={() => router.push('/questions')} className={styles.industriesGridItemButton}>B</button>
                 <label className={styles.industriesGridItemLabel}>{item}</label>
               </div>
@@ -52,4 +55,14 @@ export default function Home() {
       </main>
     </div>
   )
+}
+
+export async function getServerSideProps({ req }) {
+  const session = await auth0.getSession(req);
+  let data = null;
+  if (session && session.user)
+    data = session.user;
+  return {
+    props: { data }
+  }
 }
