@@ -23,8 +23,10 @@ class UserAccountDetails extends React.Component {
 
     error: null,
     isLoaded: false,
-    User: {}
+    User: {},
     };
+    this.onInputchange = this.onInputchange.bind(this);
+    this.onSubmitForm = this.onSubmitForm.bind(this);
   }
 
   componentDidMount() {
@@ -49,6 +51,43 @@ class UserAccountDetails extends React.Component {
       )
   }
 
+  onInputchange(event) {
+    this.setState({
+      [event.target.name]: event.target.value
+    });
+  }
+
+  onSubmitForm() {
+    console.log(this.state)
+
+    var UserUp = this.state.User
+    const timestamp = new Date().getTime();
+    var url = "https://q2k5cu1u5b.execute-api.us-west-2.amazonaws.com/dev/users/update/"
+    url += UserUp.userID
+
+    // REFACTOR!!
+    if (this.state.fname) {
+      UserUp.firstname = this.state.fname
+    }
+    if (this.state.lname) {
+      UserUp.lastname = this.state.lname
+    }
+    if (this.state.email) {
+      UserUp.email = this.state.email
+    }
+    if (this.state.address) {
+      UserUp.address1 = this.state.address
+    }
+    if (this.state.city) {
+      UserUp.city = this.state.city
+    }
+    UserUp.updatedAt = timestamp
+    postData(url, UserUp )
+      .then(data => {
+        //console.log(data); // JSON data parsed by `data.json()` call
+    });
+  }
+
   render() {
     const {
       User
@@ -69,20 +108,22 @@ class UserAccountDetails extends React.Component {
                     <Col md="6" className="form-group">
                       <label htmlFor="feFirstName">First Name</label>
                       <FormInput
+                        name = "fname"
                         id="feFirstName"
-                        placeholder="First Name"
-                        value={User.firstname}
-                        onChange={() => {}}
+                        placeholder={User.firstname}
+                        value={this.state.fname}
+                        onChange={this.onInputchange}
                       />
                     </Col>
                     {/* Last Name */}
                     <Col md="6" className="form-group">
                       <label htmlFor="feLastName">Last Name</label>
                       <FormInput
+                        name="lname"
                         id="feLastName"
-                        placeholder="Last Name"
-                        value={User.lastname}
-                        onChange={() => {}}
+                        placeholder={User.lastname}
+                        value={this.state.lname}
+                        onChange={this.onInputchange}
                       />
                     </Col>
                   </Row>
@@ -91,11 +132,12 @@ class UserAccountDetails extends React.Component {
                     <Col md="6" className="form-group">
                       <label htmlFor="feEmail">Email</label>
                       <FormInput
+                        name="email"
                         type="email"
                         id="feEmail"
-                        placeholder="Email Address"
-                        value={User.email}
-                        onChange={() => {}}
+                        placeholder={User.email}
+                        value={this.state.email}
+                        onChange={this.onInputchange}
                         autoComplete="email"
                       />
                     </Col>
@@ -103,6 +145,7 @@ class UserAccountDetails extends React.Component {
                     <Col md="6" className="form-group">
                       <label htmlFor="fePassword">Password</label>
                       <FormInput
+                        name="password"
                         type="password"
                         id="fePassword"
                         placeholder="Password"
@@ -115,10 +158,11 @@ class UserAccountDetails extends React.Component {
                   <FormGroup>
                     <label htmlFor="feAddress">Address</label>
                     <FormInput
+                      name="address"
                       id="feAddress"
-                      placeholder="Address"
-                      value={User.address1}
-                      onChange={() => {}}
+                      placeholder={User.address1}
+                      value={this.state.address}
+                      onChange={this.onInputchange}
                     />
                   </FormGroup>
                   <Row form>
@@ -126,10 +170,11 @@ class UserAccountDetails extends React.Component {
                     <Col md="6" className="form-group">
                       <label htmlFor="feCity">City</label>
                       <FormInput
+                        name="city"
                         id="feCity"
-                        placeholder="City"
-                        value={User.city}
-                        onChange={() => {}}
+                        placeholder={User.city}
+                        value={this.state.city}
+                        onChange={this.onInputchange}
                       />
                     </Col>
                     {/* State */}
@@ -170,7 +215,7 @@ class UserAccountDetails extends React.Component {
                       <FormTextarea id="feDescription" rows="5" />
                     </Col>
                   </Row>
-                  <Button theme="accent">Update Account</Button>
+                  <Button onClick={this.onSubmitForm} theme="accent">Update Account</Button>
                 </Form>
               </Col>
             </Row>
@@ -180,6 +225,26 @@ class UserAccountDetails extends React.Component {
     );
   }
 }
+
+async function postData(url = '', data = {}) {
+  // Default options are marked with *
+  const response = await fetch(url, {
+    method: 'POST', // *GET, POST, PUT, DELETE, etc.
+    mode: 'no-cors', // no-cors, *cors, same-origin
+    cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+    credentials: 'same-origin', // include, *same-origin, omit
+    headers: {
+      'Content-Type': 'application/json'
+      // 'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    redirect: 'follow', // manual, *follow, error
+    referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+    body: JSON.stringify(data) // body data type must match "Content-Type" header
+  });
+  console.log(response);
+  return response; // parses JSON response into native JavaScript objects
+}
+
 /*
 UserAccountDetails.propTypes = {
   /**
