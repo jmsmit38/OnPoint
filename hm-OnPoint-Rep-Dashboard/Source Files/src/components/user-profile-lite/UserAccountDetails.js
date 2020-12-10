@@ -213,7 +213,7 @@ class UserAccountDetails extends React.Component {
                         name="zip"
                         id="feZipCode"
                         placeholder={User.zip}
-                        value={this.state.city}
+                        value={this.state.zip}
                         onChange={this.onInputchange}
                       />
                     </Col>

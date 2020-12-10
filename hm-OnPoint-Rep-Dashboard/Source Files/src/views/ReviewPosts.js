@@ -1,6 +1,7 @@
 /* eslint jsx-a11y/anchor-is-valid: 0 */
 
 import React from "react";
+import { NavLink } from "react-router-dom";
 import {
   Container,
   Row,
@@ -14,69 +15,11 @@ import {
 
 import PageTitle from "../components/common/PageTitle";
 
-class BlogPosts extends React.Component {
+class ReviewPosts extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      // First list of posts.
-      /*
-      PostsListOne: [
-        {
-          author: "John James",
-          authorAvatar: require("../images/avatars/1.jpg"),
-          title: "Had denoting properly jointure which well books beyond",
-          body:
-            "In said to of poor full be post face snug. Introduced imprudence see say unpleasing devonshire acceptance son. Exeter longer wisdom work...",
-          date: "29 February 2019"
-        },
-        {
-          author: "John James",
-          authorAvatar: require("../images/avatars/2.jpg"),
-          title: "Husbands ask repeated resolved but laughter debating",
-          body:
-            "It abode words began enjoy years no do ﻿no. Tried spoil as heart visit blush or. Boy possible blessing sensible set but margaret interest. Off tears...",
-          date: "29 February 2019"
-        },
-        {
-          author: "John James",
-          authorAvatar: require("../images/avatars/3.jpg"),
-          title:
-            "Instantly gentleman contained belonging exquisite now direction",
-          body:
-            "West room at sent if year. Numerous indulged distance old law you. Total state as merit court green decay he. Steepest merit checking railway...",
-          date: "29 February 2019"
-        }
-      ],
-      
-      PostsListTwo: [
-        {
-          author: "John James",
-          authorAvatar: require("../images/avatars/1.jpg"),
-          title: "Had denoting properly jointure which well books beyond",
-          body:
-            "In said to of poor full be post face snug. Introduced imprudence see say unpleasing devonshire acceptance son. Exeter longer wisdom work...",
-          date: "29 February 2019"
-        },
-        {
-          author: "John James",
-          authorAvatar: require("../images/avatars/2.jpg"),
-          title: "Husbands ask repeated resolved but laughter debating",
-          body:
-            "It abode words began enjoy years no do ﻿no. Tried spoil as heart visit blush or. Boy possible blessing sensible set but margaret interest. Off tears...",
-          date: "29 February 2019"
-        },
-        {
-          author: "John James",
-          authorAvatar: require("../images/avatars/3.jpg"),
-          title:
-            "Instantly gentleman contained belonging exquisite now direction",
-          body:
-            "West room at sent if year. Numerous indulged distance old law you. Total state as merit court green decay he. Steepest merit checking railway...",
-          date: "29 February 2019"
-        }
-      ]
-      */
 
      error: null,
      isLoaded: false,
@@ -133,13 +76,15 @@ class BlogPosts extends React.Component {
                       <span className="card-post__author-name">
                         {post.firstname} {post.lastname}
                       </span>
-                      <small className="text-muted">{post.submittedAt}</small>
+                      <small className="text-muted">{new Date(post.submittedAt).toDateString()}</small>
                     </div>
                   </div>
                   <div className="my-auto ml-auto">
-                    <Button size="sm" theme="white">
-                      <i className="far fa-bookmark mr-1" /> Bookmark
-                    </Button>
+                    <NavLink to="/service-overview">
+                      <Button size="sm" theme="white">
+                        <i className="far fa-bookmark mr-1" /> Service Page
+                      </Button>
+                    </NavLink>
                   </div>
                 </CardFooter>
               </Card>
@@ -151,7 +96,7 @@ class BlogPosts extends React.Component {
   }
 }
 
-export default BlogPosts;
+export default ReviewPosts;
 
 
 /*
