@@ -85,7 +85,7 @@ class BlogPosts extends React.Component {
   }
 
   componentDidMount() {
-    fetch("https://q2k5cu1u5b.execute-api.us-west-2.amazonaws.com/dev/review/getall")
+    fetch("https://uwv1ywfwqe.execute-api.us-west-2.amazonaws.com/dev/review/getall")
       .then(res => res.json())
       .then(
         (result) => {

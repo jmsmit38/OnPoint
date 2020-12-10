@@ -9,7 +9,59 @@ import {
   Progress
 } from "shards-react";
 
-const UserDetails = ({ userDetails }) => (
+
+class UserDetails extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+
+    error: null,
+    isLoaded: false,
+    userDetails: {},
+    };
+  }
+
+  componentDidMount() {
+    fetch("https://uwv1ywfwqe.execute-api.us-west-2.amazonaws.com/dev/users/getdetails/cf5bfa80-3b31-11eb-8991-f381fa75653e")
+      .then(res => res.json())
+      .then(
+        (result) => {
+          this.setState({
+            isLoaded: true,
+            userDetails: {
+              name: result.firstname,
+              avatar: require("./../../images/avatars/stock.png"),
+              jobTitle: "Project Manager",
+              performanceReportTitle: "Workload",
+              performanceReportValue: 74,
+              metaTitle: "About Me",
+              metaValue: result.profileDesc
+            }
+          });
+        },
+        // Note: it's important to handle errors here
+        // instead of a catch() block so that we don't swallow
+        // exceptions from actual bugs in components.
+        (error) => {
+          this.setState({
+            isLoaded: true,
+            error
+          });
+        }
+      )
+  }
+
+  onChangeAvatar() {
+    console.log(this.state)
+  }
+
+  render() {
+    const {
+      userDetails
+    } = this.state;
+
+    return (
   <Card small className="mb-4 pt-3">
     <CardHeader className="border-bottom text-center">
       <div className="mb-3 mx-auto">
@@ -51,25 +103,9 @@ const UserDetails = ({ userDetails }) => (
     </ListGroup>
   </Card>
 );
+}
+}
 
-UserDetails.propTypes = {
-  /**
-   * The user details object.
-   */
-  userDetails: PropTypes.object
-};
 
-UserDetails.defaultProps = {
-  userDetails: {
-    name: "OnPointAdmin",
-    avatar: require("./../../images/avatars/stock.png"),
-    jobTitle: "Project Manager",
-    performanceReportTitle: "Workload",
-    performanceReportValue: 74,
-    metaTitle: "Description",
-    metaValue:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Odio eaque, quidem, commodi soluta qui quae minima obcaecati quod dolorum sint alias, possimus illum assumenda eligendi cumque?"
-  }
-};
 
 export default UserDetails;

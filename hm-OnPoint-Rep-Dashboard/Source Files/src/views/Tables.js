@@ -18,7 +18,7 @@ class CustomerLookup extends React.Component {
   }
 
   componentDidMount() {
-    fetch("https://q2k5cu1u5b.execute-api.us-west-2.amazonaws.com/dev/users/getall")
+    fetch("https://uwv1ywfwqe.execute-api.us-west-2.amazonaws.com/dev/users/getall")
       .then(res => res.json())
       .then(
         (result) => {
