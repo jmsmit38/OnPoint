@@ -30,7 +30,7 @@ class UserAccountDetails extends React.Component {
   }
 
   componentDidMount() {
-    fetch("https://q2k5cu1u5b.execute-api.us-west-2.amazonaws.com/dev/users/getdetails/b9f81f30-3a2c-11eb-a889-59b2ef1a3cd1")
+    fetch("https://uwv1ywfwqe.execute-api.us-west-2.amazonaws.com/dev/users/getdetails/cf5bfa80-3b31-11eb-8991-f381fa75653e")
       .then(res => res.json())
       .then(
         (result) => {
@@ -62,7 +62,7 @@ class UserAccountDetails extends React.Component {
 
     var UserUp = this.state.User
     const timestamp = new Date().getTime();
-    var url = "https://q2k5cu1u5b.execute-api.us-west-2.amazonaws.com/dev/users/update/"
+    var url = "https://uwv1ywfwqe.execute-api.us-west-2.amazonaws.com/dev/users/update/"
     url += UserUp.userID
 
     // REFACTOR!!
@@ -81,9 +81,17 @@ class UserAccountDetails extends React.Component {
     if (this.state.city) {
       UserUp.city = this.state.city
     }
+    if (this.state.profileDesc) {
+      UserUp.profileDesc = this.state.profileDesc
+    }
+    if (this.state.zip) {
+      UserUp.zip = this.state.zip
+    }
+    
     UserUp.updatedAt = timestamp
     postData(url, UserUp )
       .then(data => {
+        //Update to popup confirmation message
         //console.log(data); // JSON data parsed by `data.json()` call
     });
   }
@@ -202,9 +210,11 @@ class UserAccountDetails extends React.Component {
                     <Col md="2" className="form-group">
                       <label htmlFor="feZipCode">Zip</label>
                       <FormInput
+                        name="zip"
                         id="feZipCode"
-                        placeholder="Zip"
-                        onChange={() => {}}
+                        placeholder={User.zip}
+                        value={this.state.zip}
+                        onChange={this.onInputchange}
                       />
                     </Col>
                   </Row>
@@ -212,7 +222,14 @@ class UserAccountDetails extends React.Component {
                     {/* Description */}
                     <Col md="12" className="form-group">
                       <label htmlFor="feDescription">Description</label>
-                      <FormTextarea id="feDescription" rows="5" />
+                      <FormTextarea
+                        name="profileDesc" 
+                        id="feDescription" 
+                        rows="5"
+                        placeholder={User.profileDesc}
+                        value={this.state.profileDesc}
+                        onChange={this.onInputchange}
+                      />
                     </Col>
                   </Row>
                   <Button onClick={this.onSubmitForm} theme="accent">Update Account</Button>

@@ -17,14 +17,16 @@ module.exports.newUser = (event, context, callback) => {
   const address2 = requestBody.address2;
   const city = requestBody.city;
   const stateCode = requestBody.stateCode;
+  const profileDesc = requestBody.profileDesc;
+  const zip = requestBody.zip;
 
-  if (typeof firstname !== 'string' || typeof lastname !== 'string' || typeof email !== 'string' || typeof phone !== 'string' || typeof address1 !== 'string' || typeof address2 !== 'string' || typeof city !== 'string' || typeof stateCode !== 'string') {
+  if (typeof firstname !== 'string' || typeof lastname !== 'string' || typeof email !== 'string' || typeof phone !== 'string' || typeof address1 !== 'string' || typeof address2 !== 'string' || typeof city !== 'string' || typeof stateCode !== 'string' || typeof profileDesc !== 'string' || typeof zip !== 'string') {
     console.error('Validation Failed');
     callback(new Error('Couldn\'t submit user because of validation errors.'));
     return;
   }
 
-  submitUserP(userInfo(firstname, lastname, email, phone, address1, address2, city, stateCode))
+  submitUserP(userInfo(firstname, lastname, email, phone, address1, address2, city, stateCode, profileDesc, zip))
     .then(res => {
       callback(null, {
         statusCode: 200,
@@ -62,14 +64,16 @@ module.exports.updateUser = (event, context, callback) => {
   const city = requestBody.city;
   const stateCode = requestBody.stateCode;
   const submittedAt = requestBody.submittedAt;
+  const profileDesc = requestBody.profileDesc;
+  const zip = requestBody.zip;
 
-  if (typeof userID !== 'string' || typeof firstname !== 'string' || typeof lastname !== 'string' || typeof email !== 'string' || typeof phone !== 'string' || typeof address1 !== 'string' || typeof address2 !== 'string' || typeof city !== 'string' || typeof stateCode !== 'string') {
+  if (typeof userID !== 'string' || typeof firstname !== 'string' || typeof lastname !== 'string' || typeof email !== 'string' || typeof phone !== 'string' || typeof address1 !== 'string' || typeof address2 !== 'string' || typeof city !== 'string' || typeof stateCode !== 'string' || typeof profileDesc !== 'string' || typeof zip !== 'string') {
     console.error('Validation Failed');
     callback(new Error('Couldn\'t update user because of validation errors.'));
     return;
   }
 
-  updateUserP(userInfoU(userID, firstname, lastname, email, phone, address1, address2, city, stateCode, submittedAt))
+  updateUserP(userInfoU(userID, firstname, lastname, email, phone, address1, address2, city, stateCode, profileDesc, submittedAt, zip))
     .then(res => {
       callback(null, {
         statusCode: 200,
@@ -98,7 +102,7 @@ module.exports.updateUser = (event, context, callback) => {
 module.exports.getUsers = (event, context, callback) => {
   var params = {
       TableName: process.env.USER_TABLE,
-      ProjectionExpression: "userID, firstname, lastname, email, phone, address1, address2, city, stateCode, submittedAt, updatedAt"
+      ProjectionExpression: "userID, firstname, lastname, email, phone, address1, address2, city, stateCode, profileDesc, zip, submittedAt, updatedAt"
   };
 
   console.log("Scanning User table.");
@@ -253,16 +257,18 @@ const updateUserP = user => {
       ":city": user.city,
       ":stateCode": user.stateCode,
       ":submittedAt": user.submittedAt,
-      ":updatedAt": user.updatedAt  
+      ":updatedAt": user.updatedAt,  
+      ":profileDesc": user.profileDesc,
+      ":zip": user.zip
     },
-    UpdateExpression: 'SET firstname = :firstname, lastname = :lastname, email = :email, phone = :phone, address1 = :address1, address2 = :address2, city = :city, stateCode = :stateCode, submittedAt = :submittedAt, updatedAt = :updatedAt',
+    UpdateExpression: 'SET firstname = :firstname, lastname = :lastname, email = :email, phone = :phone, address1 = :address1, address2 = :address2, city = :city, stateCode = :stateCode, profileDesc = :profileDesc, zip = :zip, submittedAt = :submittedAt, updatedAt = :updatedAt',
     ReturnValues: 'UPDATED_NEW',
   };
   return dynamoDb.update(userInfoUp).promise()
     .then(res => user);
 };
 
-const userInfoU = (userID, firstname, lastname, email, phone, address1, address2, city, stateCode, submittedAt) => {
+const userInfoU = (userID, firstname, lastname, email, phone, address1, address2, city, stateCode, profileDesc, zip, submittedAt) => {
   const timestamp = new Date().getTime();
   return {
     userID: userID,
@@ -274,12 +280,14 @@ const userInfoU = (userID, firstname, lastname, email, phone, address1, address2
     address2: address2,
     city: city,
     stateCode: stateCode,
+    profileDesc: profileDesc,
+    zip: zip,
     submittedAt: submittedAt,
     updatedAt: timestamp,
   };
 };
 
-const userInfo = (firstname, lastname, email, phone, address1, address2, city, stateCode) => {
+const userInfo = (firstname, lastname, email, phone, address1, address2, city, stateCode, profileDesc, zip) => {
   const timestamp = new Date().getTime();
   return {
     userID: uuid.v1(),
@@ -291,6 +299,8 @@ const userInfo = (firstname, lastname, email, phone, address1, address2, city, s
     address2: address2,
     city: city,
     stateCode: stateCode,
+    profileDesc: profileDesc,
+    zip: zip,
     submittedAt: timestamp,
     updatedAt: timestamp,
   };

@@ -5,13 +5,13 @@ import { Redirect } from "react-router-dom";
 import { DefaultLayout } from "./layouts";
 
 // Route Views
-import BlogOverview from "./views/BlogOverview";
+import SalesDashboard from "./views/SalesDashboard";
 import UserProfileLite from "./views/UserProfileLite";
 import AddNewPost from "./views/AddNewPost";
 import Errors from "./views/Errors";
-import ComponentsOverview from "./views/ComponentsOverview";
-import Tables from "./views/Tables";
-import BlogPosts from "./views/BlogPosts";
+import ServiceOverview from "./views/ServiceOverview";
+import UserTables from "./views/UserTable";
+import ReviewPosts from "./views/ReviewPosts";
 
 export default [
   {
@@ -23,7 +23,7 @@ export default [
   {
     path: "/overview",
     layout: DefaultLayout,
-    component: BlogOverview
+    component: SalesDashboard
   },
   {
     path: "/user-profile-lite",
@@ -41,18 +41,18 @@ export default [
     component: Errors
   },
   {
-    path: "/components-overview",
+    path: "/service-overview",
     layout: DefaultLayout,
-    component: ComponentsOverview
+    component: ServiceOverview
   },
   {
     path: "/customers",
     layout: DefaultLayout,
-    component: Tables
+    component: UserTables
   },
   {
     path: "/reviews",
     layout: DefaultLayout,
-    component: BlogPosts
+    component: ReviewPosts
   }
 ];
