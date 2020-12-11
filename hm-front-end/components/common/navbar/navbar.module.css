@@ -8,6 +8,7 @@
     padding: 0px 16px;
     height: 80px;
     width: 100%;
+    border-bottom: 1px solid var(--lightgray-color);
 }
 
 .logo {

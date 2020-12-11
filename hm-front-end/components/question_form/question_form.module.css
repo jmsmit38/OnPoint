@@ -5,7 +5,7 @@
     display: grid;
     place-content: center;
     place-items: center;
-    grid-template-columns: repeat(auto-fit, 480px);
+    grid-template-columns: repeat(auto-fit, 360px);
     column-gap: 64px;
     row-gap: 64px;
 }
@@ -15,31 +15,35 @@
     margin: 16px 0px;
     padding: 32px;
     border-radius: 32px;
-    height: 336px;
-    width: 336px;
+    height: 320px;
+    width: 320px;
     box-shadow: var(--box-shadow-light);
 }
 
 .form {
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
     width: 100%;
     height: 100%;
 }
 
 .title {
-    margin-top: 0px;
     color: var(--primary-color);
     align-self: center;
+    font-size: 2em;
 }
 
-.input {
-    font-size: 1em;
-    height: 32px;
+.select, .input {
+    font-size: 1.2em;
+    width: 100%;
+    height: 48px;
+    font-weight: 500;
     border-radius: 6px;
-    margin: 8px 0px;
-    padding: 8px 16px;
-    border: solid 1px var(--lightgray-color);
+    outline: none;
+    border: solid var(--lightgray-color) 1px;
+    padding: 8px;
 }
 
 .createButton,
@@ -78,32 +82,14 @@
     border-top: solid 1px var(--lightgray-color);
 }
 
-.mapIcon {
-    /* width: 54px; 
-    height: 63px;
-     */
-     display: block;
-     margin: auto;
-     width: 50%;
-}
-
 .paintIcon {
-    /* width: 54px; 
-    height: 63px;
-     */
      display: block;
      margin: auto;
-     width: 50%;
+     width: 30%;
+     width: 30%;
 }
 
-.select {
-    font-size: 1.2em;
-    height: 48px;
-    font-weight: 500;
-    border-radius: 6px;
-    outline: none;
-    border: solid var(--lightgray-color) 1px;
-}
+
 
 .label {
     margin: auto;

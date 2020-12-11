@@ -13,7 +13,14 @@
 }
 
 .createButton {
-    background-color: var(--secondary-color);
+  background-color: var(--primary-color);
+}
+
+.loginButton {
+  background-color: var(--secondary-color);
+}
+
+.createButton, .loginButton {
     align-self: center;
     border: none;
     outline: none;

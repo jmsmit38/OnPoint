@@ -10,7 +10,6 @@ body {
   --secondary-color: #42b72a;
   --lightgray-color: #dddfe2;
   --mediumgray-color: #646668;
-  background-image: url('../public/background.jpg');
 
   font-family: var(--font-family);
 }

@@ -1,9 +1,16 @@
 import React, { useRef, useEffect } from 'react';
 import MenuIcon from '@material-ui/icons/Menu';
+import {
+    signIn,
+    signOut,
+    useSession
+} from 'next-auth/client';
+
 import styles from './menu.module.css';
 
 export default function Menu({ data }) {
     const [menuVisible, setMenuVisible] = React.useState(false);
+    const [session] = useSession();
     const ref = useRef(null);
 
     const handleHideDropdown = (event) => {
@@ -32,20 +39,12 @@ export default function Menu({ data }) {
             <button className={styles.menuButton} onClick={() => setMenuVisible(!menuVisible)}><MenuIcon className={styles.menuIcon} /></button>
             { menuVisible && (
                 <div className={styles.menu}>
-                    <a href={"/api/login"} className={styles.lastMenuItem}>Login</a>
-                    <a href={"/api/logout"} className={styles.lastMenuItem}>Logout</a>
-                    <a href={"/api/me"} className={styles.lastMenuItem}>Me</a>
+                    { !session ?
+                        <button onClick={() => signIn("auth0")} className={styles.lastMenuItem}>Login</button>
+                        : <button onClick={() => signOut("auth0")} className={styles.lastMenuItem}>Logout</button>
+                    }
                 </div>
             )}
         </div>
     );
-}
-
-export async function getServerSideProps() {
-    const res = await fetch('/api/me');
-    const data = await res.json();
-    console.log(data);
-    return {
-        props: { data }, // will be passed to the page component as props
-    }
 }

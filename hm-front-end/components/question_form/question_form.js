@@ -7,7 +7,7 @@ export default function LoginForm(props) {
             <div className={styles.formWrapper}>
                 <form className={styles.form} method="post" action="/api/login" id="login">
                     <h1 className={styles.title}>Location of Project</h1>
-                    <label className={styles.label} for="conZip"><img className={styles.mapIcon} src="mapIcon.png" /></label>
+                    <label className={styles.label} for="conZip"><img className={styles.paintIcon} src="mapIcon.png" /></label>
                     <input className={styles.input} required name="username" id="username" placeholder="Zip Code" type="text" />
                 </form>
             </div>
@@ -105,7 +105,7 @@ export default function LoginForm(props) {
             <div className={styles.formWrapper}>
                 <form className={styles.form} method="post" action="/api/login" id="login">
                     <h1 className={styles.title}>Please tell us about your project.</h1>
-                    <label className={styles.label} for="conZip"><img className={styles.mapIcon} src="descriptionIcon.png" /></label>
+                    <label className={styles.label} for="conZip"><img className={styles.paintIcon} src="descriptionIcon.png" /></label>
                     <input className={styles.input} required name="username" id="username" placeholder="Enter a Description" type="textarea" />
                 </form>
             </div >
